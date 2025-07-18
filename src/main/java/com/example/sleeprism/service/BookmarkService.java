@@ -1,5 +1,6 @@
 package com.example.sleeprism.service;
 
+import com.example.sleeprism.dto.PostResponseDTO;
 import com.example.sleeprism.entity.Bookmark;
 import com.example.sleeprism.entity.Post;
 import com.example.sleeprism.entity.User;
@@ -12,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,4 +74,9 @@ public class BookmarkService {
   public boolean isPostBookmarkedByUser(Long postId, Long userId) {
     return bookmarkRepository.existsByUser_IdAndPost_Id(userId, postId);
   }
+
+  public List<PostResponseDTO> getBookmarkedPostsByUser(Long userId) {
+    return bookmarkRepository.findById(userId).stream().map(bookmark -> new PostResponseDTO(bookmark.getPost())).collect(Collectors.toList());
+  }
+
 }

@@ -163,4 +163,13 @@ public class PostService {
         .map(PostResponseDTO::new)
         .collect(Collectors.toList());
   }
+
+  // PostService.java
+  public List<PostResponseDTO> getPostsByAuthor(Long userId) {
+    // 1. UserRepository를 사용해 userId로 User 엔티티를 찾습니다.
+    // 2. PostRepository를 사용해 해당 User가 작성한 Post 목록을 찾습니다.
+    // 3. 찾은 Post 목록을 PostResponseDTO 목록으로 변환하여 반환합니다.
+    // 예:
+     return postRepository.findById(userId).stream().map(PostResponseDTO::new).collect(Collectors.toList());
+  }
 }

@@ -1,5 +1,6 @@
 package com.example.sleeprism.service;
 
+import com.example.sleeprism.dto.PostResponseDTO;
 import com.example.sleeprism.entity.Post;
 import com.example.sleeprism.entity.PostLike;
 import com.example.sleeprism.entity.User;
@@ -12,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -71,5 +74,9 @@ public class PostLikeService {
   @Transactional(readOnly = true)
   public boolean isPostLikedByUser(Long postId, Long userId) {
     return postLikeRepository.findByUserIdAndPostId(userId, postId).isPresent();
+  }
+
+  public List<PostResponseDTO> getLikedPostsByUser(Long userId) {
+    return postLikeRepository.findByUser_Id(userId).stream().map(like -> new PostResponseDTO(like.getPost())).collect(Collectors.toList());
   }
 }
