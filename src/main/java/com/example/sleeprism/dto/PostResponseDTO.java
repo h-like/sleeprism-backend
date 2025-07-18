@@ -47,7 +47,7 @@ public class PostResponseDTO {
     this.category = post.getCategory();
     this.viewCount = post.getViewCount();
     this.isDeleted = post.isDeleted();
-    this.authorNickname = post.getOriginalAuthor().getUsername();
+    this.authorNickname = post.getOriginalAuthor().getNickname();
     this.originalAuthorId = post.getOriginalAuthor().getId();
     this.authorProfileImageUrl = post.getOriginalAuthor().getProfileImageUrl();
     this.createdAt = post.getCreatedAt();
