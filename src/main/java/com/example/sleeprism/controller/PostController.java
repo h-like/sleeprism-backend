@@ -313,5 +313,21 @@ public class PostController {
     }
   }
 
-  // TODO: 검색, 인기 게시글 등에 대한 엔드포인트 추가
+  @GetMapping("/search")
+  public ResponseEntity<List<PostResponseDTO>> searchPosts(
+      @RequestParam("type") String type,
+      @RequestParam("keyword") String keyword
+  ) {
+    try {
+      List<PostResponseDTO> posts = postService.searchPosts(type, keyword);
+      return ResponseEntity.ok(posts);
+    } catch (IllegalArgumentException e) {
+      // 유효하지 않은 검색 타입이 들어올 경우
+      return ResponseEntity.badRequest().build();
+    } catch (Exception e) {
+      log.error("Error during post search: {}", e.getMessage(), e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
 }

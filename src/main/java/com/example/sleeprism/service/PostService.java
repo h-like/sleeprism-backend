@@ -172,4 +172,24 @@ public class PostService {
     // 예:
      return postRepository.findById(userId).stream().map(PostResponseDTO::new).collect(Collectors.toList());
   }
+
+  public List<PostResponseDTO> searchPosts(String type, String keyword) {
+    List<Post> posts;
+    switch (type.toLowerCase()) {
+      case "title":
+        posts = postRepository.findByTitleContainingAndIsDeletedFalseOrderByCreatedAtDesc(keyword);
+        break;
+      case "content":
+        posts = postRepository.findByContentContainingAndIsDeletedFalseOrderByCreatedAtDesc(keyword);
+        break;
+      case "author":
+        posts = postRepository.findByOriginalAuthor_NicknameContainingAndIsDeletedFalseOrderByCreatedAtDesc(keyword);
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid search type: " + type);
+    }
+    return posts.stream()
+        .map(PostResponseDTO::new)
+        .collect(Collectors.toList());
+  }
 }

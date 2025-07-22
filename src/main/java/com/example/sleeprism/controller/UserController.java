@@ -2,6 +2,7 @@ package com.example.sleeprism.controller;
 
 import com.example.sleeprism.dto.*;
 import com.example.sleeprism.entity.User;
+import com.example.sleeprism.service.NotificationService;
 import com.example.sleeprism.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserController {
   private final UserService userService;
+  private final NotificationService notificationService;
 
   // 회원가입
   @PostMapping("/signup")
@@ -41,6 +43,14 @@ public class UserController {
     return ResponseEntity.ok(responseDto);
   }
 
+  // 여기서는 AuthProvider와의 연계를 위해 /api/me를 그대로 사용합니다.
+  @GetMapping("/me")
+  public ResponseEntity<UserResponseDTO> getCurrentUser(@AuthenticationPrincipal User currentUser) {
+    if (currentUser == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    return ResponseEntity.ok(new UserResponseDTO(currentUser));
+  }
 
   // 사용자 프로필 조회 (인증된 사용자만 접근 가능)
   @GetMapping("/profile")
@@ -77,7 +87,6 @@ public class UserController {
   }
 
   // UserDetails에서 userId를 추출하는 헬퍼 메서드 (실제 구현에 따라 달라짐)
-  // UserDetails에서 userId를 추출하는 헬퍼 메서드 (실제 구현에 따라 달라짐)
   private Long extractUserIdFromUserDetails(UserDetails userDetails) {
     // 실제 UserDetails 구현이 com.example.sleeprism.model.User라고 가정합니다.
     // User 엔티티에 getId() 메서드가 있어서 사용자 ID를 반환한다고 가정합니다.
@@ -89,4 +98,5 @@ public class UserController {
     // 예: ((CustomUserDetails) userDetails).getUserId();
     throw new IllegalArgumentException("사용자 정보를 가져올 수 없습니다. UserDetails 구현을 확인하세요.");
   }
+
 }

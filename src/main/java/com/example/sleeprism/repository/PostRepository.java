@@ -86,4 +86,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   // isDeleted = FALSE이고 createdAt이 startDate와 endDate 사이인 게시글을
   // 좋아요 수, 북마크 수, 조회수 순으로 내림차순 정렬
   List<Post> findByIsDeletedFalseAndCreatedAtBetweenOrderByLikeCountDescBookmarkCountDescViewCountDesc(LocalDateTime startDate, LocalDateTime endDate);
+
+  // 제목으로 검색 (Containing은 SQL의 LIKE '%keyword%'와 유사)
+  List<Post> findByTitleContainingAndIsDeletedFalseOrderByCreatedAtDesc(String title);
+
+  // 내용으로 검색
+  List<Post> findByContentContainingAndIsDeletedFalseOrderByCreatedAtDesc(String content);
+
+  // 작성자 닉네임으로 검색 (연관된 User 엔티티의 필드 검색)
+  List<Post> findByOriginalAuthor_NicknameContainingAndIsDeletedFalseOrderByCreatedAtDesc(String nickname);
 }

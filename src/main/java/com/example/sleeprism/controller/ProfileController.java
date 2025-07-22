@@ -1,7 +1,9 @@
 package com.example.sleeprism.controller;
 
+import com.example.sleeprism.dto.NotificationResponseDTO;
 import com.example.sleeprism.dto.PostResponseDTO;
 import com.example.sleeprism.entity.User;
+import com.example.sleeprism.service.NotificationService;
 import com.example.sleeprism.service.PostService;
 import com.example.sleeprism.service.BookmarkService;
 import com.example.sleeprism.service.PostLikeService;
@@ -27,6 +29,7 @@ public class ProfileController {
   private final PostService postService;
   private final PostLikeService postLikeService;
   private final BookmarkService bookmarkService;
+  private final NotificationService notificationService;
 
   // UserDetails에서 userId를 추출하는 헬퍼 메서드
   private Long extractUserIdFromUserDetails(UserDetails userDetails) {
@@ -73,6 +76,23 @@ public class ProfileController {
     // TODO: BookmarkService에 userId로 북마크한 게시글을 조회하는 메서드 추가 필요
     List<PostResponseDTO> bookmarkedPosts = bookmarkService.getBookmarkedPostsByUser(userId);
     return ResponseEntity.ok(bookmarkedPosts);
+  }
+
+
+  /**
+   * 현재 인증된 사용자의 모든 알림 목록을 조회합니다.
+   * @param currentUser @AuthenticationPrincipal을 통해 주입된 현재 사용자 정보
+   * @return 알림 목록 DTO 리스트
+   */
+  @GetMapping("/notifications")
+  public ResponseEntity<List<NotificationResponseDTO>> getNotificationsForCurrentUser(
+      @AuthenticationPrincipal User currentUser) {
+    if (currentUser == null) {
+      return ResponseEntity.status(401).build(); // Unauthorized
+    }
+    // NotificationService의 기존 메서드를 올바르게 호출합니다.
+    List<NotificationResponseDTO> notifications = notificationService.getNotificationsForUser(currentUser.getId());
+    return ResponseEntity.ok(notifications);
   }
 
   // TODO: 필요하다면 /api/me/notifications, /api/me/chat-rooms 등 "나의 활동" 관련 API 추가
