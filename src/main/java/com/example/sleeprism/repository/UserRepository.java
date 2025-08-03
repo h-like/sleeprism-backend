@@ -19,11 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   // socialProvider와 socialId로 사용자 조회 (소셜 로그인)
   Optional<User> findBySocialProviderAndSocialId(String socialProvider, String socialId);
 
-  // --- 아래 메서드들은 User 엔티티에 'username' 필드가 없을 경우 컴파일/실행 오류를 유발하므로 제거합니다. ---
-  // Optional<User> findByUsername(String username);
-  // Optional<User> findByUsernameOrEmail(String username, String email);
-  // boolean existsByUsername(String username);
-
   // 특정 필드의 존재 여부 확인 (중복 체크 등에 활용)
   boolean existsByEmail(String email);
   boolean existsByNickname(String nickname);

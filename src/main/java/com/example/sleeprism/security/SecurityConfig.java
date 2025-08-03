@@ -86,9 +86,10 @@ public class SecurityConfig {
                 "/oauth2/**", "/login/**", "/api/files/**", "/api/posts/files/**", "/test.html", "/api/sounds/**"
             ).permitAll()
             .requestMatchers("/api/posts", "/api/posts/{postId}").permitAll()
-            .requestMatchers("/files/profile-images/**", "/api/comments/post/**").permitAll()
+            .requestMatchers("/files/profile-images/**", "/api/comments/**").permitAll()
             .requestMatchers("/files/**", "/images/**", "/api/me/**").permitAll()
             .requestMatchers("/sale-requests/**").authenticated()
+            .requestMatchers("/author/**").authenticated()
             // 나머지 모든 요청은 인증을 요구합니다.
             .anyRequest().authenticated()
         )

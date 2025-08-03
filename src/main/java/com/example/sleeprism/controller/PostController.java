@@ -248,6 +248,18 @@ public class PostController {
     }
   }
 
+  // 특정 사용자가 작성한 모든 게시글 조회 엔드포인트
+  @GetMapping("/author/{userId}")
+  public ResponseEntity<List<PostResponseDTO>> getPostsByAuthor(@PathVariable Long userId) {
+    try {
+      List<PostResponseDTO> posts = postService.getPostsByAuthor(userId);
+      return ResponseEntity.ok(posts);
+    } catch (Exception e) {
+      log.error("Error fetching posts for user {}: {}", userId, e.getMessage(), e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
   // ==== Quill.js 이미지 업로드 및 파일 제공 엔드포인트 추가 ====
 
   /**
